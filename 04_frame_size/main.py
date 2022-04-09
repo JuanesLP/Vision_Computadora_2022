@@ -11,7 +11,6 @@ while True:
 
     if isFirst:
         fps = videoInput.get(cv2.CAP_PROP_FPS)
-        #width, height, dimension = frame.shape
         width = videoInput.get(cv2.CAP_PROP_FRAME_WIDTH)
         height = videoInput.get(cv2.CAP_PROP_FRAME_HEIGHT)
         videoOutput = cv2.VideoWriter('Output01.avi', videoFourcc, fps, (int(width), int(height)), True)
