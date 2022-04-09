@@ -1,17 +1,32 @@
 import cv2
 
-# read image
-img = cv2.imread('butterfly.jpg', cv2.IMREAD_UNCHANGED)
+videoInput = cv2.VideoCapture(0)
+videoFourcc = cv2.VideoWriter_fourcc(*'XVID')
+videoOutput = None
 
-# get dimensions of image
-dimensions = img.shape
+isFirst = True
+while True:
+    fps = videoInput.get(cv2.CAP_PROP_FPS)
+    ret, frame = videoInput.read()
 
-# height, width, number of channels in image
-height = img.shape[0]
-width = img.shape[1]
-channels = img.shape[2]
+    if isFirst:
+        fps = videoInput.get(cv2.CAP_PROP_FPS)
+        width = videoInput.get(cv2.CAP_PROP_FRAME_WIDTH)
+        height = videoInput.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        videoOutput = cv2.VideoWriter('Output01.avi', videoFourcc, fps, (int(width), int(height)), True)
+        isFirst = False
 
-print('Image Dimension    : ', dimensions)
-print('Image Height       : ', height)
-print('Image Width        : ', width)
-print('Number of Channels : ', channels)
+    if ret is True:
+        videoOutput.write(frame)
+        cv2.imshow('frame', frame)
+        if cv2.waitKey(int(fps)) & 0xFF == ord('q'):
+            break
+    else:
+        break
+
+
+
+
+videoInput.release()
+videoOutput.release()
+cv2.destroyAllWindows()
