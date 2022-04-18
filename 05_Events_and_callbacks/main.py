@@ -8,8 +8,8 @@ ix, iy = -1, -1
 img = cv2.imread('840_560.jpeg', 1)
 cv2.namedWindow('image')
 
-
-
+#Cuando diujamos con el mouse, no tenemos que dibujar sobre la misma imagen! HAY QUE DIBUJAR SIEMPRE SOBRE LA IMAGEN ORIGINAL
+#evitar que se use la misma referencia/variable de la imagen, utilizar siempre la original!.
 def draw_circle(event, x, y, flags, param):
     global ix, iy, drawing, mode
     if event == cv2.EVENT_LBUTTONDOWN:
