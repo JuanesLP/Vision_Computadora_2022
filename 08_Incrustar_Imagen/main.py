@@ -31,13 +31,6 @@ while True:
         break
     elif k == ord('r'):
         img = orig.copy()
-    elif k == ord('g'):
-        print(iy, fy, ix, fx)
-        crop_img = img[iy:fy, ix:fx]
-        cv2.imshow("cropped", crop_img)
-        cv2.imwrite("resultado.jpeg", crop_img)
-        if cv2.waitKey(0) & 0xFF == 27:
-            cv2.destroyWindow("cropped")
 
 
 
