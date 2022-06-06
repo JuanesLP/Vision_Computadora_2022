@@ -31,10 +31,11 @@ def scale(img, x, y):
     return scaled_image;
 
 def euclid_transformation(img, angle, x_traslation, y_traslation, x_scale, y_scale):
-    rotated = rotate(img, angle);
+    similarity = scale(img, x_scale, y_scale)
+    rotated = rotate(similarity, angle);
     euclid = traslate(rotated, x_traslation, y_traslation)
-    similarity = scale(euclid, x_scale, y_scale)
-    return similarity
+
+    return euclid
 
 
 eculid_transformated_image = euclid_transformation(image, 35, 30, 20, 300, 300)
