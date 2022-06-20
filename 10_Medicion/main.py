@@ -10,7 +10,6 @@ rows, cols, ch = img.shape
 selectedPoints = []
 window = ""
 index = 0
-height = 2.10
 width = 0.83
 
 print("SELECCIONE LAS ESQUINAS EN SENTIDO HORARIO DE LA PUERTA, COMENZANDO CON LA ESQUINA SUPERIOR IZQUIERDA")
@@ -63,14 +62,7 @@ dst = np.array([[0, 0], [RECTIFIED_WIDTH, 0], [RECTIFIED_WIDTH, RECTIFIED_HEIGHT
 M = cv2.getPerspectiveTransform(src, dst)
 warped = cv2.warpPerspective(originalImage, M, (RECTIFIED_WIDTH, RECTIFIED_HEIGHT))
 
-cv2.imwrite("output.jpg", warped)
 
-while(1):
-    cv2.imshow("Title of Popup Window", warped)
-    k = cv2.waitKey(1) & 0xFF
-    if k == 27:
-        cv2.destroyWindow("Title of Popup Window")
-        break
 
 counter = 0
 selectedPoints.clear()
@@ -107,7 +99,6 @@ while(1):
         final = str(round(final_mesure * rate,4))
         img2 = img.copy()
         cv2.putText(img2,final, (int(x), int(y)), 1, 0.75, (0,0,0),1,cv2.LINE_AA)
-        #cv2.addText(img,final,(x, y),1,1,(0,255,0),1,1,1)
         cv2.imshow("Mesure", img2)
 
     key = cv2.waitKey(1) & 0xFF
@@ -118,4 +109,3 @@ while(1):
         counter = 0
         selectedPoints.clear()
 
-#fuente donde se buscó la solución: https://stackoverflow.com/questions/49397489/using-getperspective-in-opencv
