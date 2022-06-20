@@ -2,25 +2,44 @@
 import numpy as np
 import cv2
 
-MIN_MATCH_COUNT = 10
-img1 = cv2.imread("imagen1.jpg")# Leemos la imagen 1
-img2 = cv2.imread("imagen2.jpg")# Leemos la imagen 2
-dscr = # Inicializamos el detector y el descriptor
+MIN_MATCH_COUNT = 30
+img1 = cv2.imread("img1.jpeg")# Leemos la imagen 1
+convert1 = cv2.resize(img1,(800,600), interpolation=cv2.INTER_CUBIC)
 
-kp1 , des1 = # Encontramos los puntos clave y los descriptores con SIFT en la imagen 1
-kp2 , des2 = # Encontramos los puntos clave y los descriptores con SIFT en la imagen 2
-matcher = cv2 . BFMatcher ( cv2 .NORM_L2)
-matches = matcher . knnMatch ( des1 , des2 , k=2)
+img2 = cv2.imread("img2.jpeg")# Leemos la imagen 2
+convert2 = cv2.resize(img2,(800,600), interpolation=cv2.INTER_CUBIC)
+
+
+dscr = cv2.SIFT_create()# Inicializamos el detector y el descriptor
+
+kp1 , des1 = dscr.detectAndCompute(convert1,None)# Encontramos los puntos clave y los descriptores con SIFT en la imagen 1
+kp2 , des2 = dscr.detectAndCompute(convert2,None)# Encontramos los puntos clave y los descriptores con SIFT en la imagen 2
+
+matcher = cv2.BFMatcher(cv2.NORM_L2)
+matches = matcher.knnMatch(des1, des2, k=2)
 # Guardamos los buenos matches usando el test de razón de Lowe
 good = [ ]
-for m, n in matches :
-i f m. di s t anc e < 0 . 7 * n . di s t anc e :
-good . append (m)
-i f ( len ( good ) > MIN_MATCH_COUNT) :
-s r c _pt s = np . f l o a t 3 2 ( [ kp1 [m. queryIdx ] . pt for m in good ] ) . reshape ( −1 , 1 , 2)
-ds t_pt s = np . f l o a t 3 2 ( [ kp2 [m. t r a inIdx ] . pt for m in good ] ) . reshape ( −1 , 1 , 2)
-H, mask = cv2 . findHomography ( ds t_pt s , s r c_pt s , cv2 .RANSAC, 5 . 0 ) # Computamos la homografía con RANSAC
-wimg2 = # Aplicamos la transformación perspectiva H a la imagen 2
+for m, n in matches:
+    if m.distance < 0.8 * n.distance:
+        good.append(m)
+if(len(good) > MIN_MATCH_COUNT):
+    src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
+    dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
+    H, mask = cv2.findHomography(dst_pts, src_pts, cv2.RANSAC, 5.0) # Computamos la homografía con RANSAC
+
+
+
+wimg2 = cv2.warpPerspective(convert2, H, (800,600))
+
+
 # Mezclamos ambas imágenes
-alpha = 0 . 5
-blend = np . ar ray (wimg2 * alpha + img1 * (1 − alpha ) , dtype=np . uint8 )
+alpha = 0.5
+
+blend = np.array(wimg2 * alpha + convert1 * (1 - alpha), dtype=np.uint8)
+
+while(1):
+    cv2.imshow("final", blend)
+    k = cv2.waitKey(1) & 0xFF
+    if k == 27:
+        cv2.destroyAllWindows()
+        break
