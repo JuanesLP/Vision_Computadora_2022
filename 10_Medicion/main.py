@@ -7,12 +7,12 @@ originalImage = cv2.resize(originalImage,(800,600), interpolation=cv2.INTER_CUBI
 img = originalImage.copy()
 counter = 0
 rows, cols, ch = img.shape
-selectedPoints = []
 window = ""
 index = 0
 width = 0.83
+selectedPoints = [[35, 25], [305, 49], [303, 258], [28, 252]]
 
-print("SELECCIONE LAS ESQUINAS EN SENTIDO HORARIO DE LA PUERTA, COMENZANDO CON LA ESQUINA SUPERIOR IZQUIERDA")
+#print("SELECCIONE LAS ESQUINAS EN SENTIDO HORARIO DE LA PUERTA, COMENZANDO CON LA ESQUINA SUPERIOR IZQUIERDA")
 
 
 def draw_dot(event, x, y, flags, param):
@@ -33,17 +33,17 @@ def append_new_point(point):
     print(selectedPoints, counter)
 
 
-cv2.namedWindow(winname= "Title of Popup Window")
-cv2.setMouseCallback("Title of Popup Window", draw_dot)
-window = "Points"
+#cv2.namedWindow(winname= "Title of Popup Window")
+#cv2.setMouseCallback("Title of Popup Window", draw_dot)
+#window = "Points"
 
-while counter != 4:
-    cv2.imshow("Title of Popup Window", img)
-    k = cv2.waitKey(1) & 0xFF
-    if k == 27:
-        break
-    elif k == ord('r'):
-        img = originalImage.copy()
+#while counter != 4:
+#    cv2.imshow("Title of Popup Window", img)
+#    k = cv2.waitKey(1) & 0xFF
+#    if k == 27:
+#        break
+#    elif k == ord('r'):
+#        img = originalImage.copy()
 
 RECTIFIED_WIDTH = selectedPoints[1][0] - selectedPoints[0][0] #estos puntos son para aproximar el tamaño final de la imagen
 RECTIFIED_HEIGHT = selectedPoints[3][1] - selectedPoints[0][1]
